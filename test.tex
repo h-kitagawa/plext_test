@@ -1,0 +1,97 @@
+\ifdefined\BASEDIR \else\let\BASEDIR=\yoko\fi
+\documentclass[10pt,dvipdfmx]{jarticle}
+%\usepackage{plext}
+\usepackage{xcolor}
+\usepackage[papersize={148mm,148mm},textwidth=32zw,lines=25,centering]{geometry}
+\makeatletter
+
+\def\A#1#2{%
+\setbox0=\hbox{あ\tabcolsep\z@%
+  \ifx\BASEDIR\tate\setbox\strutbox=\copy\tstrutbox\fi
+  \setbox0=\hbox{%
+    \begin{tabular}#2[#1]{l}
+      \hline ◆abcdeあいう◆\\ \hline
+    \end{tabular}}%
+  \leavevmode
+  \textcolor{green!70!black}{%
+    \raise-\iftdir\tbaselineshift\else\ybaselineshift\fi
+    \hbox{\vrule width \dimexpr 20pt+\wd0 height 0.4pt depth 0pt}}%
+  \kern-\dimexpr 20pt+\wd0
+  \textcolor{cyan}{\vrule width \dimexpr 20pt+\wd0 height 0.4pt depth 0pt}%
+  \kern-\dimexpr 10pt+\wd0 \box0\kern10pt
+  \kern3em
+  \setbox0=\hbox{%
+    \begin{tabular}#2[#1]{c}
+      ◆abcdeあいう◆\\◆あいう◆あいう◆
+    \end{tabular}}%
+  \textcolor{green!70!black}{%
+    \raise-\iftdir\tbaselineshift\else\ybaselineshift\fi
+    \hbox{\vrule width \dimexpr 20pt+\wd0 height 0.4pt depth 0pt}}%
+  \kern-\dimexpr 20pt+\wd0
+  \textcolor{cyan}{\vrule width \dimexpr 20pt+\wd0 height 0.4pt depth 0pt}%
+  \kern-\dimexpr 10pt+\wd0 \box0\kern10pt
+}\ht0=50pt\dp0=50pt\leavevmode\box0
+}
+
+\everypar{}
+\setbox0\vtop{\BASEDIR\normalsize\adjustbaseline
+\textbf{　　　　　　　　未読込}
+\begin{description}
+\def\makelabel#1{\hbox to 4em{#1}}
+   \item[Top] \A{t}{}
+   \item[Center] \A{c}{}
+   \item[Bottom] \A{b}{}
+\end{description}
+}
+
+\usepackage{plext}
+
+\setbox2\vtop{\BASEDIR\normalsize\adjustbaseline
+\textbf{組方向指定なし　　　　　読込}
+\begin{description}
+\def\makelabel#1{\hbox to 4em{#1}}
+   \item[Top] \A{t}{}
+   \item[Center] \A{c}{}
+   \item[Bottom] \A{b}{}
+\end{description}
+}
+
+\begin{document}
+\noindent\rlap{\textcolor{red}{\box0}}\rlap{\textcolor{black}{\box2}}
+
+\vtop{\BASEDIR\normalsize\adjustbaseline
+\textbf{組方向y}
+\begin{description}
+\def\makelabel#1{\hbox to 4em{#1}}
+   \item[Top] \A{t}{<y>}
+   \item[Center] \leavevmode\kern2zw\A{c}{<y>}
+   \item[Bottom] \A{b}{<y>}
+\end{description}
+}
+
+\newpage
+
+\vtop{\BASEDIR\normalsize\adjustbaseline
+\textbf{組方向t}
+\begin{description}
+\def\makelabel#1{\hbox to 4em{#1}}
+   \item[Top] \A{t}{<t>}
+   \item[Center] \leavevmode\kern4zw\A{c}{<t>}
+   \item[Bottom] \A{b}{<t>}
+\end{description}
+}
+
+\newpage
+
+\vtop{\BASEDIR\normalsize\adjustbaseline
+\textbf{組方向z}
+\begin{description}
+\def\makelabel#1{\hbox to 4em{#1}}
+   \item[Top] \A{t}{<z>}
+   \item[Center] \leavevmode\kern2zw\A{c}{<z>}
+   \item[Bottom] \A{b}{<z>}
+\end{description}
+}
+
+\end{document}
+
