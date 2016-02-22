@@ -34,64 +34,62 @@
 }
 
 \everypar{}
-\setbox0\vtop{\BASEDIR\normalsize\adjustbaseline
-\textbf{　　　　　　　　未読込}
+\newbox\lto
+\setbox\lto\vtop{\BASEDIR\normalsize\adjustbaseline\noindent
+\textbf{\kern5zw未読込}
 \begin{description}
 \def\makelabel#1{\hbox to 4em{#1}}
    \item[Top] \A{t}{}
-   \item[Center] \A{c}{}
+   \item[Center] \leavevmode\kern3zw\A{c}{}
    \item[Bottom] \A{b}{}
 \end{description}
 }
+
+\def\PLT#1#2{%
+  \expandafter\newbox\csname pl#1#2\endcsname
+  \expandafter\setbox\csname pl#1#2\endcsname
+  \vtop{\BASEDIR\normalsize\adjustbaseline\noindent
+  \textbf{\ifx#1b 開発版\else \kern9zwアスキー版\fi \smash{\hbox to1zw{#2\hss}}}
+  \begin{description}
+  \def\makelabel##1{\hbox to 4em{##1}}
+     \item[Top] \A{t}{<#2>}
+     \item[Center] \leavevmode\kern3zw\A{c}{<#2>}
+     \item[Bottom] \A{b}{<#2>}
+  \end{description}}}
 
 \usepackage{plext}
+\PLT on\PLT oy\PLT ot \PLT oz
 
-\setbox2\vtop{\BASEDIR\normalsize\adjustbaseline
-\textbf{組方向指定なし　　　　　読込}
-\begin{description}
-\def\makelabel#1{\hbox to 4em{#1}}
-   \item[Top] \A{t}{}
-   \item[Center] \A{c}{}
-   \item[Bottom] \A{b}{}
-\end{description}
-}
+\usepackage{plext-beta}
+\PLT bn\PLT by\PLT bt \PLT bz
 
 \begin{document}
-\noindent\rlap{\textcolor{red}{\box0}}\rlap{\textcolor{black}{\box2}}
+\parindent0pt
 
-\vtop{\BASEDIR\normalsize\adjustbaseline
-\textbf{組方向y}
-\begin{description}
-\def\makelabel#1{\hbox to 4em{#1}}
-   \item[Top] \A{t}{<y>}
-   \item[Center] \leavevmode\kern2zw\A{c}{<y>}
-   \item[Bottom] \A{b}{<y>}
-\end{description}
-}
+\noindent
+\rlap{\textcolor{red}{\copy\plon}}%
+\rlap{\textcolor{black}{\copy\lto}}%
 
-\newpage
+\noindent
+\rlap{\textcolor{blue}{\copy\plbn}}%
+\rlap{\textcolor{black}{\copy\lto}}%
 
-\vtop{\BASEDIR\normalsize\adjustbaseline
-\textbf{組方向t}
-\begin{description}
-\def\makelabel#1{\hbox to 4em{#1}}
-   \item[Top] \A{t}{<t>}
-   \item[Center] \leavevmode\kern4zw\A{c}{<t>}
-   \item[Bottom] \A{b}{<t>}
-\end{description}
-}
+\noindent
+\rlap{\textcolor{red}{\copy\plon}}%
+\rlap{\textcolor{blue}{\copy\plbn}}%
 
-\newpage
+\noindent
+\rlap{\textcolor{red}{\copy\ploy}}%
+\rlap{\textcolor{blue}{\copy\plby}}%
 
-\vtop{\BASEDIR\normalsize\adjustbaseline
-\textbf{組方向z}
-\begin{description}
-\def\makelabel#1{\hbox to 4em{#1}}
-   \item[Top] \A{t}{<z>}
-   \item[Center] \leavevmode\kern2zw\A{c}{<z>}
-   \item[Bottom] \A{b}{<z>}
-\end{description}
-}
+\noindent
+\rlap{\textcolor{red}{\copy\plot}}%
+\rlap{\textcolor{blue}{\copy\plbt}}%
+
+\noindent
+\rlap{\textcolor{red}{\copy\ploz}}%
+\rlap{\textcolor{blue}{\copy\plbz}}%
+
 
 \end{document}
 
