@@ -2,10 +2,10 @@
 \documentclass[10pt,dvipdfmx]{jarticle}
 %\usepackage{plext}
 \usepackage{xcolor}
-\usepackage[papersize={148mm,148mm},textwidth=32zw,lines=25,centering]{geometry}
+\usepackage[papersize={182mm,182mm},textwidth=42zw,lines=30,centering]{geometry}
 \makeatletter
 
-\def\A#1#2{%
+\def\At#1#2{%
 \setbox0=\hbox{あ\tabcolsep\z@%
   \ifx\BASEDIR\tate\setbox\strutbox=\copy\tstrutbox\fi
   \setbox0=\hbox{%
@@ -29,67 +29,99 @@
     \hbox{\vrule width \dimexpr 20pt+\wd0 height 0.4pt depth 0pt}}%
   \kern-\dimexpr 20pt+\wd0
   \textcolor{cyan}{\vrule width \dimexpr 20pt+\wd0 height 0.4pt depth 0pt}%
-  \kern-\dimexpr 10pt+\wd0 \box0\kern10pt
+  \kern-\dimexpr 10pt+\wd0\box0\kern10pt
 }\ht0=50pt\dp0=50pt\leavevmode\box0
 }
 
+\def\Ap#1#2{%
+\setbox0=\hbox{あ\tabcolsep\z@%
+  \ifx\BASEDIR\tate\setbox\strutbox=\copy\tstrutbox\fi
+  \setbox0=\hbox{\parbox#2[#1]{7zw}{%
+	 ◆あいおxyz ab-cdeあ◇う\break◆◆◆◇◆◆◆\break あいうえおかきえPhy◆}}
+  \leavevmode
+  \textcolor{green!70!black}{%
+    \raise-\iftdir\tbaselineshift\else\ybaselineshift\fi
+    \hbox{\vrule width \dimexpr 20pt+\wd0 height 0.4pt depth 0pt}}%
+  \kern-\dimexpr 20pt+\wd0
+  \textcolor{cyan}{\vrule width \dimexpr 20pt+\wd0 height 0.4pt depth 0pt}%
+  \kern-\dimexpr 10pt+\wd0 \vrule width0.4ptheight30ptdepth30pt
+  \kern-0.4pt\box0\kern10pt
+  }\ht0=50pt\dp0=50pt\leavevmode\box0 }
+
+
 \everypar{}
-\newbox\lto
-\setbox\lto\vtop{\BASEDIR\normalsize\adjustbaseline\noindent
-\textbf{\kern5zw未読込}
-\begin{description}
-\def\makelabel#1{\hbox to 4em{#1}}
-   \item[Top] \A{t}{}
-   \item[Center] \leavevmode\kern3zw\A{c}{}
-   \item[Bottom] \A{b}{}
-\end{description}
-}
+\def\LTORIG#1{%
+  \expandafter\newbox\csname lt#1\endcsname
+  \global\expandafter\setbox\csname lt#1\endcsname
+  \vtop{\BASEDIR\normalsize\adjustbaseline\noindent
+ 	\textbf{\kern5zw未読込}
+	  \begin{description}
+		\def\makelabel##1{\hbox to 4em{##1}}
+	   \item[Top] \A{t}{}
+	   \item[Center] \leavevmode\kern3zw\A{c}{}
+	   \item[Math] $\A{c}{}$
+	   \item[Bottom] \leavevmode\kern3zw\A{b}{}
+	  \end{description}
+  }}
+\let\A=\At\LTORIG o
+\let\A=\Ap\LTORIG p
 
 \def\PLT#1#2{%
   \expandafter\newbox\csname pl#1#2\endcsname
-  \expandafter\setbox\csname pl#1#2\endcsname
+  \global\expandafter\setbox\csname pl#1#2\endcsname
   \vtop{\BASEDIR\normalsize\adjustbaseline\noindent
-  \textbf{\ifx#1b 開発版\else \kern9zwアスキー版\fi \smash{\hbox to1zw{#2\hss}}}
+  \textbf{\ifnum`#1<`o 開発版\else \kern9zwアスキー版\fi \smash{\hbox to1zw{#2\hss}}}
   \begin{description}
   \def\makelabel##1{\hbox to 4em{##1}}
      \item[Top] \A{t}{<#2>}
      \item[Center] \leavevmode\kern3zw\A{c}{<#2>}
-     \item[Bottom] \A{b}{<#2>}
+	 \item[Math] $\A{c}{<#2>}$
+     \item[Bottom] \leavevmode\kern3zw\A{b}{<#2>}
   \end{description}}}
 
 \usepackage{plext}
-\PLT on\PLT oy\PLT ot \PLT oz
+\let\A=\At\PLT on\PLT oy\PLT ot \PLT oz
+\let\A=\Ap\PLT pn\PLT py\PLT pt \PLT pz
 
 \usepackage{plext-beta}
-\PLT bn\PLT by\PLT bt \PLT bz
+\let\A=\At\PLT bn\PLT by\PLT bt \PLT bz
+\let\A=\Ap\PLT cn\PLT cy\PLT ct \PLT cz
 
+\makeatletter
+\def\@out#1#2{\expandafter\copy\csname #1#2\endcsname}
+
+\def\OUT#1#2{%
+\newpage\noindent
+\rlap{\textcolor{red}{\@out{pl#1}n}}%
+\rlap{\textcolor{black}{\@out{lt#1}{}}}%
+\newpage
+\noindent
+\rlap{\textcolor{blue}{\@out{pl#2}n}}%
+\rlap{\textcolor{black}{\@out{lt#1}{}}}%
+\newpage
+\noindent
+\rlap{\textcolor{red}{\@out{pl#1}n}}%
+\rlap{\textcolor{blue}{\@out{pl#2}n}}%
+\newpage
+\noindent
+\rlap{\textcolor{red}{\@out{pl#1}y}}%
+\rlap{\textcolor{blue}{\@out{pl#2}y}}%
+\newpage
+\noindent
+\rlap{\textcolor{red}{\@out{pl#1}t}}%
+\rlap{\textcolor{blue}{\@out{pl#2}t}}%
+\newpage
+\noindent
+\rlap{\textcolor{red}{\@out{pl#1}z}}%
+\rlap{\textcolor{blue}{\@out{pl#2}z}}%
+\newpage
+}
 \begin{document}
 \parindent0pt
 
-\noindent
-\rlap{\textcolor{red}{\copy\plon}}%
-\rlap{\textcolor{black}{\copy\lto}}%
-
-\noindent
-\rlap{\textcolor{blue}{\copy\plbn}}%
-\rlap{\textcolor{black}{\copy\lto}}%
-
-\noindent
-\rlap{\textcolor{red}{\copy\plon}}%
-\rlap{\textcolor{blue}{\copy\plbn}}%
-
-\noindent
-\rlap{\textcolor{red}{\copy\ploy}}%
-\rlap{\textcolor{blue}{\copy\plby}}%
-
-\noindent
-\rlap{\textcolor{red}{\copy\plot}}%
-\rlap{\textcolor{blue}{\copy\plbt}}%
-
-\noindent
-\rlap{\textcolor{red}{\copy\ploz}}%
-\rlap{\textcolor{blue}{\copy\plbz}}%
-
-
+\hbox{\BASEDIR\LARGE\adjustbaseline tabular, array環境}
+\OUT ob
+\hbox{\BASEDIR\LARGE\adjustbaseline \texttt{\textbackslash parbox}命令}
+\OUT pc
 \end{document}
 
