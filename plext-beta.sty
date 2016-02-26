@@ -97,7 +97,50 @@
 \expandafter \let \csname endtabular*\endcsname = \endtabular
 \def\fork@array@option<#1>[#2]{%
 \@rotswfalse
-\iftdir
+\iftdir\if@plext@math %%% 周囲が縦数式
+\if #1y\relax\let\box@dir\yoko
+  \if #2t\relax
+     \def\@begin@alignbox{\vtop\bgroup\kern\z@\vbox}%
+     \let\@end@alignbox\egroup
+  \else\if #2b\relax
+     \def\@begin@alignbox{\vbox\bgroup\vbox}%
+     \def\@end@alignbox{\kern\z@\egroup}%
+  \else
+     \def\@begin@alignbox{\hbox\bgroup$\vcenter}%
+     \def\@end@alignbox{$\egroup}%
+  \fi\fi
+\else\if #1z\relax\let\box@dir\relax\@rotswtrue
+  \if #2t\relax
+     \def\@begin@alignbox{\raise\ybaselineshift\vtop}%
+     \let\@end@alignbox\relax
+  \else\if #2b\relax
+     \def\@begin@alignbox{\raise\ybaselineshift\vbox}%
+     \let\@end@alignbox\relax
+  \else
+     \def\@begin@alignbox{\setbox\z@=\vtop}%
+     \def\@end@alignbox{%
+	\@tempdima=\tbaselineshift
+	\advance\@tempdima-0.5\ht\z@
+	\advance\@tempdima 0.5\dp\z@
+	\raise\@tempdima\box\z@}%
+  \fi\fi
+\else\let\box@dir\tate
+  \if #2t\relax
+     \def\@begin@alignbox{\vtop}%
+     \let\@end@alignbox\relax
+  \else\if #2b\relax
+     \def\@begin@alignbox{\vbox}%
+     \let\@end@alignbox\relax
+  \else %% aligned center wrt baseline of Japanese character
+     \def\@begin@alignbox{\setbox\z@=\vtop}%
+     \def\@end@alignbox{%
+	 \@tempdima=\tbaselineshift
+	 \advance\@tempdima-0.5\ht\z@
+	 \advance\@tempdima 0.5\dp\z@
+	 \raise\@tempdima\box\z@}%
+  \fi\fi
+\fi\fi
+\else %%% 周囲が通常の縦
 \if #1y\relax\let\box@dir\yoko
   \if #2t\relax
      \def\@begin@alignbox{\raise\tbaselineshift\vtop\bgroup\kern\z@\vbox}%
@@ -120,9 +163,6 @@
   \else\if #2b\relax
      \def\@begin@alignbox{\raise\ybaselineshift\vbox}%
      \let\@end@alignbox\relax
-  \else\if@plext@math
-     \def\@begin@alignbox{\hbox\bgroup$\vcenter}%
-     \def\@end@alignbox{$\egroup}%
   \else
      \def\@begin@alignbox{\setbox\z@=\vtop}%
      \def\@end@alignbox{%
@@ -130,7 +170,7 @@
 	\advance\@tempdima-0.5\ht\z@
 	\advance\@tempdima 0.5\dp\z@
 	\raise\@tempdima\box\z@}%
-  \fi\fi\fi
+  \fi\fi
 \else\let\box@dir\tate
   \if #2t\relax
      \def\@begin@alignbox{\raise\tbaselineshift\vtop}%
@@ -146,8 +186,8 @@
 	 \advance\@tempdima 0.5\dp\z@
 	 \raise\@tempdima\box\z@}%
   \fi\fi
-\fi\fi
-\else
+\fi\fi\fi
+\else %%% 周囲が横
 \if #1t\relax\let\box@dir\tate
   \if #2t\relax
      \def\@begin@alignbox{\vtop\bgroup\kern\z@\vbox}%

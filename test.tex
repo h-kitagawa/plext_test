@@ -1,6 +1,7 @@
 \ifdefined\BASEDIR \else\let\BASEDIR=\yoko\fi
 \ifdefined\BLS\else\def\BLS{0pt}\fi
 \documentclass[10pt,dvipdfmx]{jarticle}
+\newif\ifMATH
 %\usepackage{plext}
 \usepackage{xcolor}
 \usepackage[papersize={182mm,182mm},textwidth=42zw,lines=30,centering]{geometry}
@@ -9,13 +10,13 @@
 \let\orig@adjustbaseline=\adjustbaseline
 \def\adjustbaseline{\orig@adjustbaseline\ybaselineshift\BLS\relax}
 \def\At#1#2{%
-\setbox0=\hbox{\hbox to20pt{\hss あabc}\tabcolsep\z@%
+\setbox0=\hbox{\ifMATH$\fi\tabcolsep\z@%
   \ifx\BASEDIR\tate\setbox\strutbox=\copy\tstrutbox\fi
   \setbox0=\hbox{%
     \begin{tabular}#2[#1]{l}
       \hline ◆\smash{abcde}あいう◆\\ \hline
     \end{tabular}}%
-  \leavevmode\kern-20pt%
+  \leavevmode%
   \textcolor{green!70!black}{%
     \raise-\iftdir
       \ifmdir\ybaselineshift\else\tbaselineshift\fi
@@ -23,7 +24,7 @@
     \hbox{\vrule width \dimexpr 40pt+\wd0 height 0.4pt depth 0pt}}%
   \kern-\dimexpr 40pt+\wd0
   \textcolor{cyan}{\vrule width \dimexpr 40pt+\wd0 height 0.4pt depth 0pt}%
-  \kern-\dimexpr 20pt+\wd0 \box0\kern4em%
+  \kern-\dimexpr 40pt+\wd0 \hbox to20pt{\hss あabc}\box0\kern4em%
   \kern3em%
   \setbox0=\hbox{%
     \begin{tabular}#2[#1]{c}
@@ -38,8 +39,7 @@
   \kern-\dimexpr 20pt+\wd0
   \textcolor{cyan}{\vrule width \dimexpr 20pt+\wd0 height 0.4pt depth 0pt}%
   \kern-\dimexpr 10pt+\wd0\box0\kern10pt%
-}\ht0=50pt\dp0=50pt\leavevmode\box0
-}
+\ifMATH$\fi}\ht0=50pt\dp0=50pt\leavevmode\box0 }
 
 \def\Ap#1#2{%
 \setbox0=\hbox{あ\tabcolsep\z@%
@@ -67,8 +67,7 @@
 		\def\makelabel##1{\hbox to 4em{##1\hss}}
 	   \item[Top] \A{t}{}
 	   \item[Center] \leavevmode\kern4zw\A{c}{}
-	   \item[Math] $\A{c}{}$
-	   \item[Bottom] \leavevmode\kern4zw\A{b}{}
+	   \item[Bottom] \A{b}{}
 	  \end{description}
   }}
 \let\A=\At\LTORIG o
@@ -78,13 +77,13 @@
   \expandafter\newbox\csname pl#1#2\endcsname
   \global\expandafter\setbox\csname pl#1#2\endcsname
   \vtop{\BASEDIR\normalsize\adjustbaseline\noindent
-  \textbf{\ifnum`#1<`o 開発版\else \kern9zwアスキー版\fi \smash{\hbox to1zw{#2\hss}}}
+  \textbf{\ifnum`#1<`o 開発版\else \kern9zwアスキー版\fi
+    \smash{\hbox to1zw{#2\hss}}\ifMATH 数式\fi}
   \begin{description}
   \def\makelabel##1{\hbox to 4em{##1\hss}}
      \item[Top] \A{t}{<#2>}
      \item[Center] \leavevmode\kern4zw\A{c}{<#2>}
-	 \item[Math] $\A{c}{<#2>}$
-     \item[Bottom] \leavevmode\kern4zw\A{b}{<#2>}
+     \item[Bottom] \A{b}{<#2>}
   \end{description}}}
 
 \usepackage{plext}
@@ -92,11 +91,16 @@
 \let\A=\Ap\PLT pn\PLT py\PLT pt \PLT pz
 
 \usepackage{plext-beta}
-\let\A=\At\PLT bn\PLT by\PLT bt \PLT bz
-\let\A=\Ap\PLT cn\PLT cy\PLT ct \PLT cz
+\let\A=\At
+\MATHfalse\PLT bn\PLT by\PLT bt \PLT bz
+\MATHtrue \PLT dn\PLT dy\PLT dt \PLT dz
+\MATHfalse
+\let\A=\Ap
+\PLT cn\PLT cy\PLT ct \PLT cz
 
 \makeatletter
-\def\@out#1#2{\expandafter\copy\csname #1#2\endcsname}
+\def\@out#1#2{%
+  \edef\boxname{#1#2}\expandafter\copy\csname \boxname\endcsname}
 
 \def\OUT#1#2{%
 \newpage\noindent
@@ -122,15 +126,16 @@
 \noindent
 \rlap{\textcolor{red}{\@out{pl#1}z}}%
 \rlap{\textcolor{blue}{\@out{pl#2}z}}%
+\newpage}
+\def\OUTNEW#1#2{%
+\noindent
+\rlap{\textcolor{#2}{\@out{pl#1}y}}%
 \newpage
 \noindent
-\rlap{\textcolor{blue}{\@out{pl#2}y}}%
+\rlap{\textcolor{#2}{\@out{pl#1}t}}%
 \newpage
 \noindent
-\rlap{\textcolor{blue}{\@out{pl#2}t}}%
-\newpage
-\noindent
-\rlap{\textcolor{blue}{\@out{pl#2}z}}%
+\rlap{\textcolor{#2}{\@out{pl#1}z}}%
 \newpage
 }
 \begin{document}
@@ -138,6 +143,8 @@
 
 \hbox{\BASEDIR\LARGE\adjustbaseline tabular, array環境}
 \OUT ob
+\OUTNEW{b}{blue}
+\OUTNEW{d}{blue!50!black}
 \hbox{\BASEDIR\LARGE\adjustbaseline \texttt{\textbackslash parbox}命令}
 \OUT pc
 \end{document}
