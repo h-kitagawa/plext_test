@@ -14,7 +14,9 @@
     \end{tabular}}%
   \leavevmode
   \textcolor{green!70!black}{%
-    \raise-\iftdir\tbaselineshift\else\ybaselineshift\fi
+    \raise-\iftdir
+      \ifmdir\ybaselineshift\else\tbaselineshift\fi
+    \else\ybaselineshift\fi
     \hbox{\vrule width \dimexpr 20pt+\wd0 height 0.4pt depth 0pt}}%
   \kern-\dimexpr 20pt+\wd0
   \textcolor{cyan}{\vrule width \dimexpr 20pt+\wd0 height 0.4pt depth 0pt}%
@@ -22,10 +24,13 @@
   \kern3em
   \setbox0=\hbox{%
     \begin{tabular}#2[#1]{c}
-      ◆abcdeあいう◆\\◆あいう◆あいう◆
+      ◆abcdeあいう◆\\◆あいう◆あいう◆\\
+      ◆abcdeあいう◆
     \end{tabular}}%
   \textcolor{green!70!black}{%
-    \raise-\iftdir\tbaselineshift\else\ybaselineshift\fi
+    \raise-\iftdir
+      \ifmdir\ybaselineshift\else\tbaselineshift\fi
+    \else\ybaselineshift\fi
     \hbox{\vrule width \dimexpr 20pt+\wd0 height 0.4pt depth 0pt}}%
   \kern-\dimexpr 20pt+\wd0
   \textcolor{cyan}{\vrule width \dimexpr 20pt+\wd0 height 0.4pt depth 0pt}%
@@ -113,6 +118,15 @@
 \newpage
 \noindent
 \rlap{\textcolor{red}{\@out{pl#1}z}}%
+\rlap{\textcolor{blue}{\@out{pl#2}z}}%
+\newpage
+\noindent
+\rlap{\textcolor{blue}{\@out{pl#2}y}}%
+\newpage
+\noindent
+\rlap{\textcolor{blue}{\@out{pl#2}t}}%
+\newpage
+\noindent
 \rlap{\textcolor{blue}{\@out{pl#2}z}}%
 \newpage
 }

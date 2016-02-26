@@ -24,7 +24,7 @@
 %% \CharacterTable
 %%  {Upper-case    \A\B\C\D\E\F\G\H\I\J\K\L\M\N\O\P\Q\R\S\T\U\V\W\X\Y\Z
 %%   Lower-case    \a\b\c\d\e\f\g\h\i\j\k\l\m\n\o\p\q\r\s\t\u\v\w\x\y\z
-%%   Digits        \0\1\2\3\4\5\6\7\8\9
+%%   Digits        0\1\2\3\4\5\6\7\8\9
 %%   Exclamation   \!     Double quote  \"     Hash (number) \#
 %%   Dollar        \$     Percent       \%     Ampersand     \&
 %%   Acute accent  \'     Left paren    \(     Right paren   \)
@@ -110,15 +110,15 @@
   \fi\fi
 \else\if #1z\relax\let\box@dir\relax\@rotswtrue
   \if #2t\relax
-     \def\@begin@alignbox{\raise\tbaselineshift\vtop}%
+     \def\@begin@alignbox{\raise0\tbaselineshift\vtop}%
      \let\@end@alignbox\relax
   \else\if #2b\relax
-     \def\@begin@alignbox{\raise\tbaselineshift\vbox}%
+     \def\@begin@alignbox{\raise0\tbaselineshift\vbox}%
      \let\@end@alignbox\relax
   \else
      \def\@begin@alignbox{\setbox\z@=\vtop}%
      \def\@end@alignbox{%
-	\@tempdima=\tbaselineshift
+	\@tempdima=0\tbaselineshift
 	\advance\@tempdima-0.5\ht\z@
 	\advance\@tempdima 0.5\dp\z@
 	\raise\@tempdima\box\z@}%
