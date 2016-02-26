@@ -41,10 +41,15 @@
 \ProvidesPackage{plext}
    [2016/02/22 v1.2a pLaTeX package file (community edition)]
 \newif\if@rotsw
-\def\array{\let\@acol\@arrayacol \let\@classz\@arrayclassz
- \let\@classiv\@arrayclassiv
- \let\\\@arraycr\let\@halignto\@empty\X@tabarray}
-\def\tabular{\let\@halignto\@empty\X@tabular}
+\newif\if@plext@math
+\def\array{%
+  \ifmdir\@plext@mathtrue\else\@plext@mathfalse\fi
+  \let\@acol\@arrayacol \let\@classz\@arrayclassz
+  \let\@classiv\@arrayclassiv
+  \let\\\@arraycr\let\@halignto\@empty\X@tabarray}
+\def\tabular{%
+  \ifmdir\@plext@mathtrue\else\@plext@mathfalse\fi
+  \let\@halignto\@empty\X@tabular}
 \@namedef{tabular*}{\@ifnextchar<%>
    {\@stabular}{\@stabular<Z>}}
 \def\X@tabarray{\@ifnextchar<%>
@@ -110,19 +115,22 @@
   \fi\fi
 \else\if #1z\relax\let\box@dir\relax\@rotswtrue
   \if #2t\relax
-     \def\@begin@alignbox{\raise0\tbaselineshift\vtop}%
+     \def\@begin@alignbox{\raise\ybaselineshift\vtop}%
      \let\@end@alignbox\relax
   \else\if #2b\relax
-     \def\@begin@alignbox{\raise0\tbaselineshift\vbox}%
+     \def\@begin@alignbox{\raise\ybaselineshift\vbox}%
      \let\@end@alignbox\relax
+  \else\if@plext@math
+     \def\@begin@alignbox{\hbox\bgroup$\vcenter}%
+     \def\@end@alignbox{$\egroup}%
   \else
      \def\@begin@alignbox{\setbox\z@=\vtop}%
      \def\@end@alignbox{%
-	\@tempdima=0\tbaselineshift
+	\@tempdima=\tbaselineshift
 	\advance\@tempdima-0.5\ht\z@
 	\advance\@tempdima 0.5\dp\z@
 	\raise\@tempdima\box\z@}%
-  \fi\fi
+  \fi\fi\fi
 \else\let\box@dir\tate
   \if #2t\relax
      \def\@begin@alignbox{\raise\tbaselineshift\vtop}%

@@ -1,31 +1,34 @@
 \ifdefined\BASEDIR \else\let\BASEDIR=\yoko\fi
+\ifdefined\BLS\else\def\BLS{0pt}\fi
 \documentclass[10pt,dvipdfmx]{jarticle}
 %\usepackage{plext}
 \usepackage{xcolor}
 \usepackage[papersize={182mm,182mm},textwidth=42zw,lines=30,centering]{geometry}
-\makeatletter
 
+\makeatletter
+\let\orig@adjustbaseline=\adjustbaseline
+\def\adjustbaseline{\orig@adjustbaseline\ybaselineshift\BLS\relax}
 \def\At#1#2{%
-\setbox0=\hbox{あ\tabcolsep\z@%
+\setbox0=\hbox{\hbox to20pt{\hss あabc}\tabcolsep\z@%
   \ifx\BASEDIR\tate\setbox\strutbox=\copy\tstrutbox\fi
   \setbox0=\hbox{%
     \begin{tabular}#2[#1]{l}
-      \hline ◆abcdeあいう◆\\ \hline
+      \hline ◆\smash{abcde}あいう◆\\ \hline
     \end{tabular}}%
-  \leavevmode
+  \leavevmode\kern-20pt%
   \textcolor{green!70!black}{%
     \raise-\iftdir
       \ifmdir\ybaselineshift\else\tbaselineshift\fi
     \else\ybaselineshift\fi
-    \hbox{\vrule width \dimexpr 20pt+\wd0 height 0.4pt depth 0pt}}%
-  \kern-\dimexpr 20pt+\wd0
-  \textcolor{cyan}{\vrule width \dimexpr 20pt+\wd0 height 0.4pt depth 0pt}%
-  \kern-\dimexpr 10pt+\wd0 \box0\kern10pt
-  \kern3em
+    \hbox{\vrule width \dimexpr 40pt+\wd0 height 0.4pt depth 0pt}}%
+  \kern-\dimexpr 40pt+\wd0
+  \textcolor{cyan}{\vrule width \dimexpr 40pt+\wd0 height 0.4pt depth 0pt}%
+  \kern-\dimexpr 20pt+\wd0 \box0\kern4em%
+  \kern3em%
   \setbox0=\hbox{%
     \begin{tabular}#2[#1]{c}
-      ◆abcdeあいう◆\\◆あいう◆あいう◆\\
-      ◆abcdeあいう◆
+      ◆\smash{abcde}あいう◆\\◆あいう◆あいう◆\\
+      ◆\smash{abcde}あいう◆
     \end{tabular}}%
   \textcolor{green!70!black}{%
     \raise-\iftdir
@@ -34,7 +37,7 @@
     \hbox{\vrule width \dimexpr 20pt+\wd0 height 0.4pt depth 0pt}}%
   \kern-\dimexpr 20pt+\wd0
   \textcolor{cyan}{\vrule width \dimexpr 20pt+\wd0 height 0.4pt depth 0pt}%
-  \kern-\dimexpr 10pt+\wd0\box0\kern10pt
+  \kern-\dimexpr 10pt+\wd0\box0\kern10pt%
 }\ht0=50pt\dp0=50pt\leavevmode\box0
 }
 
@@ -50,7 +53,7 @@
   \kern-\dimexpr 20pt+\wd0
   \textcolor{cyan}{\vrule width \dimexpr 20pt+\wd0 height 0.4pt depth 0pt}%
   \kern-\dimexpr 10pt+\wd0 \vrule width0.4ptheight30ptdepth30pt
-  \kern-0.4pt\box0\kern10pt
+  \kern-0.4pt\box0\kern4em
   }\ht0=50pt\dp0=50pt\leavevmode\box0 }
 
 
@@ -61,11 +64,11 @@
   \vtop{\BASEDIR\normalsize\adjustbaseline\noindent
  	\textbf{\kern5zw未読込}
 	  \begin{description}
-		\def\makelabel##1{\hbox to 4em{##1}}
+		\def\makelabel##1{\hbox to 4em{##1\hss}}
 	   \item[Top] \A{t}{}
-	   \item[Center] \leavevmode\kern3zw\A{c}{}
+	   \item[Center] \leavevmode\kern4zw\A{c}{}
 	   \item[Math] $\A{c}{}$
-	   \item[Bottom] \leavevmode\kern3zw\A{b}{}
+	   \item[Bottom] \leavevmode\kern4zw\A{b}{}
 	  \end{description}
   }}
 \let\A=\At\LTORIG o
@@ -77,11 +80,11 @@
   \vtop{\BASEDIR\normalsize\adjustbaseline\noindent
   \textbf{\ifnum`#1<`o 開発版\else \kern9zwアスキー版\fi \smash{\hbox to1zw{#2\hss}}}
   \begin{description}
-  \def\makelabel##1{\hbox to 4em{##1}}
+  \def\makelabel##1{\hbox to 4em{##1\hss}}
      \item[Top] \A{t}{<#2>}
-     \item[Center] \leavevmode\kern3zw\A{c}{<#2>}
+     \item[Center] \leavevmode\kern4zw\A{c}{<#2>}
 	 \item[Math] $\A{c}{<#2>}$
-     \item[Bottom] \leavevmode\kern3zw\A{b}{<#2>}
+     \item[Bottom] \leavevmode\kern4zw\A{b}{<#2>}
   \end{description}}}
 
 \usepackage{plext}
