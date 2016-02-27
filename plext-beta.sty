@@ -57,7 +57,7 @@
 \def\X@tabular{\@ifnextchar<%>
    {\p@tabular}{\p@tabular<Z>}}
 \def\@stabular<#1>#2{\def\@halignto{to#2}\p@tabular<#1>}
-\def\p@tabular<#1>{\leavevmode \hbox \bgroup $\let\@acol\@tabacol
+\def\p@tabular<#1>{\leavevmode\null\hbox \bgroup $\let\@acol\@tabacol
    \let\@classz\@tabclassz
    \let\@classiv\@tabclassiv \let\\\@tabularcr\p@tabarray<#1>}
 \def\p@tabarray<#1>{\m@th\@ifnextchar[%]
@@ -93,7 +93,7 @@
     \let\@sharp##\let\protect\relax
     \lineskip\z@skip\baselineskip\z@skip\@preamble}
 \def\endarray{\crcr\egroup\egroup\@end@alignbox}
-\def\endtabular{\crcr\egroup\egroup\@end@alignbox $\egroup}
+\def\endtabular{\crcr\egroup\egroup\@end@alignbox $\egroup\null}
 \expandafter \let \csname endtabular*\endcsname = \endtabular
 \def\fork@array@option<#1>[#2]{%
 \@rotswfalse
@@ -393,7 +393,7 @@
 \def\@iiparbox<#1>#2[#3]{\@ifnextchar[%]%
    {\@iiiparbox<#1>{#2}{#3}}{\@iiiparbox<#1>{#2}{#3}[#2]}}
 \long\def\@iiiparbox<#1>#2#3[#4]#5#6{%
-  \leavevmode\bgroup
+  \leavevmode\null\bgroup
   \setlength\@tempdima{#5}%
   \fork@parbox@option<#1>[#2]%
 \if@rotsw
@@ -410,7 +410,7 @@
     \@begin@parbox\@parboxto{\box@dir\adjustbaseline
        \let\hss\vss\let\unhbox\unvbox
        \csname bm@#4\endcsname}\@end@parbox
-  \@end@tempboxa\egroup}
+  \@end@tempboxa\egroup\null}
 \def\fork@parbox@option<#1>[#2]{%
 \@rotswfalse
 \iftdir
