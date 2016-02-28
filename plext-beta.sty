@@ -39,7 +39,7 @@
 %%
 \NeedsTeXFormat{pLaTeX2e}
 \ProvidesPackage{plext}
-   [2016/02/22 v1.2a pLaTeX package file (community edition)]
+   [2016/02/28 v1.2a pLaTeX package file (community edition)]
 \newif\if@rotsw
 \newif\if@plext@math
 \def\array{%
@@ -158,18 +158,14 @@
   \fi\fi
 \else\if #1z\relax\let\box@dir\relax\@rotswtrue
   \if #2t\relax
-     \def\@begin@alignbox{\raise\ybaselineshift\vtop}%
+     \let\@begin@alignbox\vtop
      \let\@end@alignbox\relax
   \else\if #2b\relax
-     \def\@begin@alignbox{\raise\ybaselineshift\vbox}%
+     \let\@begin@alignbox\vbox
      \let\@end@alignbox\relax
   \else
-     \def\@begin@alignbox{\setbox\z@=\vtop}%
-     \def\@end@alignbox{%
-	\@tempdima=\tbaselineshift
-	\advance\@tempdima-0.5\ht\z@
-	\advance\@tempdima 0.5\dp\z@
-	\raise\@tempdima\box\z@}%
+     \let\@begin@alignbox\vcenter
+     \let\@end@alignbox\relax
   \fi\fi
 \else\let\box@dir\tate
   \if #2t\relax
@@ -201,14 +197,14 @@
   \fi\fi
 \else\let\box@dir\yoko
   \if #2t\relax
-     \let\@begin@alignbox\vtop%
+     \def\@begin@alignbox{\raise\ybaselineshift\vtop}%
      \let\@end@alignbox\relax
   \else\if #2b\relax
-     \let\@begin@alignbox\vbox
+     \def\@begin@alignbox{\raise\ybaselineshift\vbox}%
      \let\@end@alignbox\relax
   \else
-     \let\@begin@alignbox\vcenter
-     \let\@end@alignbox\relax
+     \def\@begin@alignbox{\raise\ybaselineshift\hbox\bgroup$\vcenter}%
+     \def\@end@alignbox{$\egroup}
   \fi\fi
 \fi\fi}
 \newbox\@floatbox

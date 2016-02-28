@@ -13,7 +13,23 @@
 \makeatletter
 \let\orig@adjustbaseline=\adjustbaseline
 \def\adjustbaseline{\orig@adjustbaseline
-  \ifydir
+  \setbox\adjust@box\hbox{\char\euc"A1A1}%
+  \cht\ht\adjust@box
+  \cdp\dp\adjust@box
+  \cwd\wd\adjust@box
+  \cvs\normalbaselineskip
+  \chs\cwd
+  \cHT\cht \advance\cHT\cdp
+  \ifnum11=\iftdir1\fi\ifmdir\else1\fi\relax
+    \setbox\adjust@box\hbox{\tbaselineshift\z@ M}%
+    \adjust@dimen\ht\adjust@box
+    \advance\adjust@dimen\dp\adjust@box
+    \advance\adjust@dimen-\cHT
+    \divide\adjust@dimen\tw@
+    \advance\adjust@dimen\cdp
+    \advance\adjust@dimen-\dp\adjust@box
+    \tbaselineshift\adjust@dimen
+  \else
     \setbox\adjust@box\hbox{\ybaselineshift\z@ M}%
     \adjust@dimen\ht\adjust@box
     \advance\adjust@dimen\dp\adjust@box
@@ -38,7 +54,8 @@
     \hbox{\vrule width \dimexpr 40pt+\wd0 height.1mm depth 0pt}}%
   \kern-\dimexpr 40pt+\wd0
   \textcolor{cyan}{\vrule width \dimexpr 40pt+\wd0 height.1mm depth 0pt}%
-  \kern-\dimexpr 40pt+\wd0 \hbox to20pt{\hss あabc}\box0\kern4em%
+  \kern-\dimexpr 40pt+\wd0 \hbox to20pt{\hss あ%
+  \hbox to 0pt{\textcolor{magenta!50!white}{${\kern\wd0\over\kern20pt}$}}abc}\box0\kern4em%
   \kern3em%
   \setbox0=\hbox{%
     \begin{tabular}#2[#1]{c}
@@ -51,6 +68,7 @@
     \else\ybaselineshift\fi
     \hbox{\vrule width \dimexpr 20pt+\wd0 height.1mm depth 0pt}}%
   \kern-\dimexpr 20pt+\wd0
+  \hbox to 0pt{\textcolor{magenta!50!white}{${\kern\dimexpr20pt+\wd0\over\kern20pt}$}}%
   \textcolor{cyan}{\vrule width \dimexpr 20pt+\wd0 height.1mm depth 0pt}%
   \kern-\dimexpr 10pt+\wd0\box0\kern10pt%
 \ifMATH$\fi}\ht0=50pt\dp0=50pt\leavevmode\box0 }
