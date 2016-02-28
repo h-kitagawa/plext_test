@@ -1,0 +1,27 @@
+diff --git a/texk/web2c/ptexdir/ptex-base.ch b/texk/web2c/ptexdir/ptex-base.ch
+index ea98f2d..43ab9e1 100644
+--- a/texk/web2c/ptexdir/ptex-base.ch
++++ b/texk/web2c/ptexdir/ptex-base.ch
+@@ -4738,6 +4738,22 @@ q:pointer;
+   shift_amount(cur_box):=box_context;
+ @z
+ 
++@x [47.1076] l.20884 - pTeX: explicit box in math mode
++    else  begin p:=new_noad;
++      math_type(nucleus(p)):=sub_box;
++      info(nucleus(p)):=cur_box; cur_box:=p;
++      end;
++@y
++    else  begin p:=new_noad;
++      if direction=dir_tate then
++        shift_amount(cur_box):=shift_amount(cur_box)-t_baseline_shift
++      else
++        shift_amount(cur_box):=shift_amount(cur_box)-y_baseline_shift;
++      math_type(nucleus(p)):=sub_box;
++      info(nucleus(p)):=cur_box; cur_box:=p;
++      end;
++@z
++
+ @x [47.1078] l.21585 - pTeX: box_dir adjust
+   begin append_glue; subtype(tail):=box_context-(leader_flag-a_leaders);
+   leader_ptr(tail):=cur_box;

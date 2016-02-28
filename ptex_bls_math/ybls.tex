@@ -1,0 +1,21 @@
+\ifdefined\enablecjktoken
+  \documentclass[uplatex]{jsarticle}
+\else
+  \documentclass{jsarticle}
+\fi
+\usepackage{amsmath}
+\textwidth300pt
+\begin{document}
+\ybaselineshift=10pt
+\noautoxspacing
+\def\R{\vrule height 0.4pt depth 0pt width 10pt}
+あいうえおABC$%
+  \hbox{漢X\R}\vbox{\hsize=3em 字Y\hss}\R xyz\frac{\text{漢X\R}\R213}{s}
+  \displaystyle\int_{0}^{\text{漢X\R}\R1}
+$\vrule height 50pt depth 40pt
+
+qa:54286
+\begin{equation}
+  y = f(x)= x^2+2x+1 + \int_{0}^{\pi} \frac{1+tx^2}{1-t^2}\,dt
+\end{equation}
+\end{document}
