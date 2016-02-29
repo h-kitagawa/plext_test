@@ -5,20 +5,36 @@
 \fi
 \usepackage{amsmath}
 \textwidth300pt
+
 \begin{document}
-\parindent0pt
-\ybaselineshift=10pt
 \noautoxspacing
 \showboxdepth10000
 \showboxbreadth10000
 \tracingonline1
 \def\R{\vrule height 0.4pt depth 0pt width 10pt}
+\def\cs#1{\texttt{\char92 #1}}
+new primitives
+\begin{itemize}
+  \item \cs{textbaselineshiftfactor} (1000)
+  \item \cs{textbaselineshiftfactor} (700)
+  \item \cs{textbaselineshiftfactor} (500)
+\end{itemize}
+「過剰なベースライン補正」を打ち消す（＝欧文位置を揃える）ための設定値．
+例：\cs{scriptstyle}では，明示的に挿入されたボックスは
+\cs{ybaselineshift}の$700/1000=0.7$倍だけ上昇．
+
+\makeatletter
+\let\orig@adjustbaseline=\adjustbaseline
+\def\adjustbaseline{\orig@adjustbaseline\baselineskip=1.6zh\ybaselineshift=1zh}
+\normalsize\adjustbaseline
+
 あいうえおABC$%
-  \mathop{\hbox{漢X\R}}\vbox{\hsize=3em 字Y\R\hss}\R xyz\frac{\text{漢X\R}\R213}{s}
-  \displaystyle\int_{0}^{\text{漢X\R}\R1}%\showlists
+  \mathop{\hbox{漢X\R}}\vbox{\hsize=3em 字Y\hss}\R xyz\frac{\text{\adjustbaseline 漢X\R}\R213}{s}
+  \displaystyle\int_{0}^{\text{\adjustbaseline 漢X\R}\R1}%\showlists
 $\vrule height 40pt depth 30pt
 
-ABCあ\underline{\hbox{漢X}213}%
+\makeatletter\let\underline=\@@underline
+%ABCあいう\underline{\hbox{漢X\R}\R213}
 ABCあ$\underline{\hbox{漢X}213}$%
 ABCあ$\underline{\hbox{漢X}}$\vrule height 40pt depth 30pt
 
@@ -28,11 +44,12 @@ qa:54286
   \vrule height 40pt depth 30pt
 \end{equation}
 
+下の実行例では添字のところで{\ybaselineshift0pt\cs{adjustbaseline}}未実行なため
+補正幅がおかしくなっている
 \[
 \sqrt{\text{漢X\R}\R213}
 \frac{\text{漢X\R}\R213}{s}
 \sqrt{\hbox{漢X\R}}
-\frac12
 \frac{\text{漢X\R}}{s}
   \displaystyle\int_{0}^{\text{漢X\R}\R1}
 \vrule height 40pt depth 30pt
