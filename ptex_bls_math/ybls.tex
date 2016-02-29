@@ -6,6 +6,7 @@
 \usepackage{amsmath}
 \textwidth300pt
 \begin{document}
+\parindent0pt
 \ybaselineshift=10pt
 \noautoxspacing
 \showboxdepth10000
@@ -13,12 +14,27 @@
 \tracingonline1
 \def\R{\vrule height 0.4pt depth 0pt width 10pt}
 あいうえおABC$%
-  \mathop{\hbox{漢X\R}}\vbox{\hsize=3em 字Y\hss}\R xyz\frac{\text{漢X\R}\R213}{s}
+  \mathop{\hbox{漢X\R}}\vbox{\hsize=3em 字Y\R\hss}\R xyz\frac{\text{漢X\R}\R213}{s}
   \displaystyle\int_{0}^{\text{漢X\R}\R1}%\showlists
-$\vrule height 50pt depth 40pt
+$\vrule height 40pt depth 30pt
+
+ABCあ\underline{\hbox{漢X}213}%
+ABCあ$\underline{\hbox{漢X}213}$%
+ABCあ$\underline{\hbox{漢X}}$\vrule height 40pt depth 30pt
 
 qa:54286
 \begin{equation}
   y = f(x)= x^2+2x+1 + \int_{0}^{\pi} \frac{1+tx^2}{1-t^2}\,dt
+  \vrule height 40pt depth 30pt
 \end{equation}
+
+\[
+\sqrt{\text{漢X\R}\R213}
+\frac{\text{漢X\R}\R213}{s}
+\sqrt{\hbox{漢X\R}}
+\frac12
+\frac{\text{漢X\R}}{s}
+  \displaystyle\int_{0}^{\text{漢X\R}\R1}
+\vrule height 40pt depth 30pt
+\]
 \end{document}
