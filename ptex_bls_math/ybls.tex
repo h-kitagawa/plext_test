@@ -8,10 +8,13 @@
 \begin{document}
 \ybaselineshift=10pt
 \noautoxspacing
+\showboxdepth10000
+\showboxbreadth10000
+\tracingonline1
 \def\R{\vrule height 0.4pt depth 0pt width 10pt}
 あいうえおABC$%
-  \hbox{漢X\R}\vbox{\hsize=3em 字Y\hss}\R xyz\frac{\text{漢X\R}\R213}{s}
-  \displaystyle\int_{0}^{\text{漢X\R}\R1}
+  \mathop{\hbox{漢X\R}}\vbox{\hsize=3em 字Y\hss}\R xyz\frac{\text{漢X\R}\R213}{s}
+  \displaystyle\int_{0}^{\text{漢X\R}\R1}%\showlists
 $\vrule height 50pt depth 40pt
 
 qa:54286

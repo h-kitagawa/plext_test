@@ -1,27 +1,50 @@
 diff --git a/texk/web2c/ptexdir/ptex-base.ch b/texk/web2c/ptexdir/ptex-base.ch
-index ea98f2d..43ab9e1 100644
+index ea98f2d..7bbe2a0 100644
 --- a/texk/web2c/ptexdir/ptex-base.ch
 +++ b/texk/web2c/ptexdir/ptex-base.ch
-@@ -4738,6 +4738,22 @@ q:pointer;
-   shift_amount(cur_box):=box_context;
+@@ -3534,6 +3534,7 @@ var mlist:pointer; {beginning of the given list}
+ @!penalties:boolean; {should penalty nodes be inserted?}
+ @!style:small_number; {the given style}
+ @!u:pointer; {temporary register}
++@!exp_box:boolean; {does the noad contain explicit box?}
  @z
  
-+@x [47.1076] l.20884 - pTeX: explicit box in math mode
-+    else  begin p:=new_noad;
-+      math_type(nucleus(p)):=sub_box;
-+      info(nucleus(p)):=cur_box; cur_box:=p;
-+      end;
+ @x [36.726] l.14913 - pTeX: mlist_to_hlist
+@@ -3557,6 +3558,17 @@ delete_glue_ref(space_ptr(z)); delete_glue_ref(xspace_ptr(z));
+ free_node(z,box_node_size);
+ @z
+ 
++@x [36.728] pTeX: set exp_box 
++@<Do first-pass processing...@>=
++reswitch: delta:=0;
 +@y
-+    else  begin p:=new_noad;
-+      if direction=dir_tate then
-+        shift_amount(cur_box):=shift_amount(cur_box)-t_baseline_shift
-+      else
-+        shift_amount(cur_box):=shift_amount(cur_box)-y_baseline_shift;
-+      math_type(nucleus(p)):=sub_box;
-+      info(nucleus(p)):=cur_box; cur_box:=p;
-+      end;
++@<Do first-pass processing...@>=
++reswitch: delta:=0;
++  if (type(q)>=ord_noad)and(type(q)<=inner_noad) then
++    exp_box:=(math_type(nucleus(q))=sub_box)
++  else exp_box:=false;
 +@z
 +
- @x [47.1078] l.21585 - pTeX: box_dir adjust
-   begin append_glue; subtype(tail):=box_context-(leader_flag-a_leaders);
-   leader_ptr(tail):=cur_box;
+ @x [36.730] l.14976 - pTeX: free box: disp_node
+ kern_node: begin math_kern(q,cur_mu); goto done_with_node;
+   end;
+@@ -3765,6 +3777,19 @@ math_char, math_text_char:
+ math_char, math_text_char, math_jchar, math_text_jchar:
+ @z
+ 
++@x [36.754] l.15452 - pTeX:
++sub_box: p:=info(nucleus(q));
++@y
++sub_box: begin p:=info(nucleus(q));
++  if (cur_style<script_style)and(exp_box) then begin
++    if direction=dir_tate then
++      shift_amount(p):=shift_amount(p)-t_baseline_shift
++    else
++      shift_amount(p):=shift_amount(p)-y_baseline_shift
++    end;
++  end;
++@z
++
+ @x [36.755] l.15475 - pTeX: convert math text to KANJI char_node
+   begin delta:=char_italic(cur_f)(cur_i); p:=new_character(cur_f,qo(cur_c));
+   if (math_type(nucleus(q))=math_text_char)and(space(cur_f)<>0) then
