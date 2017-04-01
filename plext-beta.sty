@@ -6,58 +6,31 @@
 %%
 %% plext.dtx  (with options: `package')
 %% 
-%% IMPORTANT NOTICE:
+%% Copyright (c) 2010 ASCII MEDIA WORKS
+%% Copyright (c) 2016 Japanese TeX Development Community
 %% 
-%% For the copyright see the source file.
+%% This file is part of the pLaTeX2e system (community edition).
+%% -------------------------------------------------------------
 %% 
-%% Any modified versions of this file must be renamed
-%% with new filenames distinct from plext.sty.
-%% 
-%% For distribution of the original source see the terms
-%% for copying and modification in the file plext.dtx.
-%% 
-%% This generated file may be distributed as long as the
-%% original source files, as listed above, are part of the
-%% same distribution. (The sources need not necessarily be
-%% in the same archive or directory.)
 %% File: plext.dtx
-%% \CharacterTable
-%%  {Upper-case    \A\B\C\D\E\F\G\H\I\J\K\L\M\N\O\P\Q\R\S\T\U\V\W\X\Y\Z
-%%   Lower-case    \a\b\c\d\e\f\g\h\i\j\k\l\m\n\o\p\q\r\s\t\u\v\w\x\y\z
-%%   Digits        0\1\2\3\4\5\6\7\8\9
-%%   Exclamation   \!     Double quote  \"     Hash (number) \#
-%%   Dollar        \$     Percent       \%     Ampersand     \&
-%%   Acute accent  \'     Left paren    \(     Right paren   \)
-%%   Asterisk      \*     Plus          \+     Comma         \,
-%%   Minus         \-     Point         \.     Solidus       \/
-%%   Colon         \:     Semicolon     \;     Less than     \<
-%%   Equals        \=     Greater than  \>     Question mark \?
-%%   Commercial at \@     Left bracket  \[     Backslash     \\
-%%   Right bracket \]     Circumflex    \^     Underscore    \_
-%%   Grave accent  \`     Left brace    \{     Vertical bar  \|
-%%   Right brace   \}     Tilde         \~}
-%%
 \NeedsTeXFormat{pLaTeX2e}
 \ProvidesPackage{plext}
-   [2016/02/28 v1.2a pLaTeX package file (community edition)]
+   [2017/03/28 v1.2f pLaTeX package file (community edition)]
 \newif\if@rotsw
-\newif\if@plext@math
-\def\array{%
-  \ifmdir\@plext@mathtrue\else\@plext@mathfalse\fi
-  \let\@acol\@arrayacol \let\@classz\@arrayclassz
+\def\array{\let\@acol\@arrayacol \let\@classz\@arrayclassz
   \let\@classiv\@arrayclassiv
   \let\\\@arraycr\let\@halignto\@empty\X@tabarray}
-\def\tabular{%
-  \ifmdir\@plext@mathtrue\else\@plext@mathfalse\fi
-  \let\@halignto\@empty\X@tabular}
+\def\tabular{\let\@halignto\@empty\X@tabular}
 \@namedef{tabular*}{\@ifnextchar<%>
    {\@stabular}{\@stabular<Z>}}
 \def\X@tabarray{\@ifnextchar<%>
    {\p@tabarray}{\p@tabarray<Z>}}
 \def\X@tabular{\@ifnextchar<%>
    {\p@tabular}{\p@tabular<Z>}}
-\def\@stabular<#1>#2{\def\@halignto{to#2}\p@tabular<#1>}
-\def\p@tabular<#1>{\leavevmode\null\hbox \bgroup $\let\@acol\@tabacol
+\def\@stabular<#1>#2{%
+   \setlength\dimen@{#2}%
+   \edef\@halignto{to\the\dimen@}\p@tabular<#1>}
+\def\p@tabular<#1>{\leavevmode \null\hbox \bgroup $\let\@acol\@tabacol
    \let\@classz\@tabclassz
    \let\@classiv\@tabclassiv \let\\\@tabularcr\p@tabarray<#1>}
 \def\p@tabarray<#1>{\m@th\@ifnextchar[%]
@@ -75,9 +48,9 @@
              \@depth\arraystretch\dp\tstrutbox \@width\z@
     \fi\fi
   \else
-    \if #1t\relax\hbox{\tate
+    \if #1t\relax\tate
        \vrule\@height\arraystretch\ht\tstrutbox
-             \@depth\arraystretch\dp\tstrutbox \@width\z@}%
+             \@depth\arraystretch\dp\tstrutbox \@width\z@
     \else
        \vrule\@height\arraystretch\ht\strutbox
              \@depth\arraystretch\dp\strutbox \@width\z@
@@ -97,66 +70,36 @@
 \expandafter \let \csname endtabular*\endcsname = \endtabular
 \def\fork@array@option<#1>[#2]{%
 \@rotswfalse
-\iftdir\if@plext@math %%% 周囲が縦数式
+\iftdir
 \if #1y\relax\let\box@dir\yoko
   \if #2t\relax
-     \def\@begin@alignbox{\vtop\bgroup\kern\z@\vbox}%
+     \def\@begin@alignbox{%
+         \@tempdima=\tbaselineshift
+         \advance\@tempdima-\ybaselineshift
+         \raise\@tempdima\vtop\bgroup\kern\z@\vtop}%
      \let\@end@alignbox\egroup
   \else\if #2b\relax
-     \def\@begin@alignbox{\vbox\bgroup\vbox}%
+     \def\@begin@alignbox{%
+         \@tempdima=\tbaselineshift
+         \advance\@tempdima-\ybaselineshift
+         \raise\@tempdima\vbox\bgroup\vbox}%
      \def\@end@alignbox{\kern\z@\egroup}%
   \else
-     \def\@begin@alignbox{\hbox\bgroup$\vcenter}%
-     \def\@end@alignbox{$\egroup}%
+     \let\@begin@alignbox\vcenter
+     \let\@end@alignbox\relax
   \fi\fi
 \else\if #1z\relax\let\box@dir\relax\@rotswtrue
   \if #2t\relax
-     \def\@begin@alignbox{\raise\ybaselineshift\vtop}%
-     \let\@end@alignbox\relax
+     \def\@begin@alignbox{\raise\cdp\vtop\bgroup\kern\z@\vbox}%
+     \let\@end@alignbox\egroup
   \else\if #2b\relax
-     \def\@begin@alignbox{\raise\ybaselineshift\vbox}%
-     \let\@end@alignbox\relax
+     \def\@begin@alignbox{\lower\cdp\vbox\bgroup\vbox}%
+     \def\@end@alignbox{\kern\z@\egroup}%
   \else
-     \def\@begin@alignbox{\setbox\z@=\vtop}%
-     \def\@end@alignbox{%
-	\@tempdima=\tbaselineshift
-	\advance\@tempdima-0.5\ht\z@
-	\advance\@tempdima 0.5\dp\z@
-	\raise\@tempdima\box\z@}%
+     \let\@begin@alignbox\vcenter
+     \let\@end@alignbox\relax
   \fi\fi
 \else\let\box@dir\tate
-  \if #2t\relax
-     \def\@begin@alignbox{\vtop}%
-     \let\@end@alignbox\relax
-  \else\if #2b\relax
-     \def\@begin@alignbox{\vbox}%
-     \let\@end@alignbox\relax
-  \else %% aligned center wrt baseline of Japanese character
-     \def\@begin@alignbox{\setbox\z@=\vtop}%
-     \def\@end@alignbox{%
-	 \@tempdima=\tbaselineshift
-	 \advance\@tempdima-0.5\ht\z@
-	 \advance\@tempdima 0.5\dp\z@
-	 \raise\@tempdima\box\z@}%
-  \fi\fi
-\fi\fi
-\else %%% 周囲が通常の縦
-\if #1y\relax\let\box@dir\yoko
-  \if #2t\relax
-     \def\@begin@alignbox{\raise\tbaselineshift\vtop\bgroup\kern\z@\vbox}%
-     \let\@end@alignbox\egroup
-  \else\if #2b\relax
-     \def\@begin@alignbox{\raise\tbaselineshift\vbox\bgroup\vbox}%
-     \def\@end@alignbox{\kern\z@\egroup}%
-  \else
-     \def\@begin@alignbox{\setbox\z@=\vtop}%
-     \def\@end@alignbox{%
-	 \@tempdima=\tbaselineshift
-	 \advance\@tempdima-0.5\ht\z@
-	 \advance\@tempdima 0.5\dp\z@
-	 \raise\@tempdima\box\z@}%
-  \fi\fi
-\else\if #1z\relax\let\box@dir\relax\@rotswtrue
   \if #2t\relax
      \let\@begin@alignbox\vtop
      \let\@end@alignbox\relax
@@ -167,23 +110,8 @@
      \let\@begin@alignbox\vcenter
      \let\@end@alignbox\relax
   \fi\fi
-\else\let\box@dir\tate
-  \if #2t\relax
-     \def\@begin@alignbox{\raise\tbaselineshift\vtop}%
-     \let\@end@alignbox\relax
-  \else\if #2b\relax
-     \def\@begin@alignbox{\raise\tbaselineshift\vbox}%
-     \let\@end@alignbox\relax
-  \else %% aligned center wrt baseline of Japanese character
-     \def\@begin@alignbox{\setbox\z@=\vtop}%
-     \def\@end@alignbox{%
-	 \@tempdima=\tbaselineshift
-	 \advance\@tempdima-0.5\ht\z@
-	 \advance\@tempdima 0.5\dp\z@
-	 \raise\@tempdima\box\z@}%
-  \fi\fi
-\fi\fi\fi
-\else %%% 周囲が横
+\fi\fi
+\else
 \if #1t\relax\let\box@dir\tate
   \if #2t\relax
      \def\@begin@alignbox{\vtop\bgroup\kern\z@\vbox}%
@@ -197,14 +125,14 @@
   \fi\fi
 \else\let\box@dir\yoko
   \if #2t\relax
-     \def\@begin@alignbox{\raise\ybaselineshift\vtop}%
+     \let\@begin@alignbox\vtop
      \let\@end@alignbox\relax
   \else\if #2b\relax
-     \def\@begin@alignbox{\raise\ybaselineshift\vbox}%
+     \let\@begin@alignbox\vbox
      \let\@end@alignbox\relax
   \else
-     \def\@begin@alignbox{\raise\ybaselineshift\hbox\bgroup$\vcenter}%
-     \def\@end@alignbox{$\egroup}
+     \let\@begin@alignbox\vcenter
+     \let\@end@alignbox\relax
   \fi\fi
 \fi\fi}
 \newbox\@floatbox
@@ -332,9 +260,9 @@
 \def\minipage{\@ifnextchar<%>
    {\X@minipage}{\X@minipage<Z>}}
 \def\X@minipage<#1>{\@ifnextchar[%]
-   {\@iminipage<#1>}{\@iiiminipage<#1>{c}\@empty[s]}}
+   {\@iminipage<#1>}{\@iiiminipage<#1>{c}\relax[s]}}
 \def\@iminipage<#1>[#2]{\@ifnextchar[%]
-   {\@iiminipage<#1>{#2}}{\@iiiminipage<#1>{#2}\@empty[s]}}
+   {\@iiminipage<#1>{#2}}{\@iiiminipage<#1>{#2}\relax[s]}}
 \def\@iiminipage<#1>#2[#3]{\@ifnextchar[%]
    {\@iiiminipage<#1>{#2}{#3}}{\@iiiminipage<#1>{#2}{#3}[#2]}}
 \def\@iiiminipage<#1>#2#3[#4]#5{%
@@ -364,8 +292,7 @@
       \let\@footnotetext\@mpfootnotetext
       \let\@listdepth\@mplistdepth \@mplistdepth\z@
       \@minipagerestore
-      \global\@minipagetrue %% \global added 24 May 89
-      \everypar{\global\@minipagefalse\everypar{}}}
+      \@setminipage}
 \def\endminipage{%
     \par
     \unskip
@@ -375,17 +302,17 @@
       \footnoterule
       \unvbox\@mpfootins
     \fi
-    \global\@minipagefalse   %% added 24 May 89
+    \@minipagefalse   %% added 24 May 89
   \color@endgroup
   \if@rotsw \egroup\m@th$\egroup\fi
   \egroup
   \expandafter\@iiiparbox\@mpargs{\unvbox\@tempboxa}\egroup}
-\def\parbox{\@ifnextchar<%>
+\DeclareRobustCommand\parbox{\@ifnextchar<%>
    {\X@parbox}{\X@parbox<Z>}}
 \def\X@parbox<#1>{\@ifnextchar[%]
-   {\@iparbox<#1>}{\@iiiparbox<#1>{c}\@empty[s]}}
+   {\@iparbox<#1>}{\@iiiparbox<#1>{c}\relax[s]}}
 \def\@iparbox<#1>[#2]{\@ifnextchar[%]
-   {\@iiparbox<#1>{#2}}{\@iiiparbox<#1>{#2}\@empty[s]}}
+   {\@iiparbox<#1>{#2}}{\@iiiparbox<#1>{#2}\relax[s]}}
 \def\@iiparbox<#1>#2[#3]{\@ifnextchar[%]%
    {\@iiiparbox<#1>{#2}{#3}}{\@iiiparbox<#1>{#2}{#3}[#2]}}
 \long\def\@iiiparbox<#1>#2#3[#4]#5#6{%
@@ -394,14 +321,14 @@
   \fork@parbox@option<#1>[#2]%
 \if@rotsw
   \@begin@tempboxa\vbox{\box@dir\hsize\@tempdima
-    \hbox{$\vbox{\@parboxrestore\adjustbaseline#6\endgraf}\m@th$}}%
+    \hbox{$\vbox{\@parboxrestore\adjustbaseline#6\@@par}\m@th$}}%
 \else
   \@begin@tempboxa\vbox{\box@dir
-    \hsize\@tempdima\@parboxrestore\adjustbaseline#6\endgraf}%
+    \hsize\@tempdima\@parboxrestore\adjustbaseline#6\@@par}%
 \fi
-    \ifx\@empty#3\relax\else
+    \ifx\relax#3\relax\else
       \setlength\@tempdimb{#3}%
-      \def\@parboxto{to\@tempdimb}%
+      \edef\@parboxto{to\the\@tempdimb}%
     \fi
     \@begin@parbox\@parboxto{\box@dir\adjustbaseline
        \let\hss\vss\let\unhbox\unvbox
@@ -418,11 +345,11 @@
       \def\@begin@parbox{\vbox\bgroup\vbox}%
       \def\@end@parbox{\kern\z@\egroup}%
    \else\ifmmode
-      \let\@begin@parbox\vtop
+      \let\@begin@parbox\vcenter
       \let\@end@parbox\relax
    \else
-     \let\@begin@parbox\vtop
-     \let\@end@parbox\relax
+      \def\@begin@parbox{$\vcenter}%
+      \def\@end@parbox{\m@th$}%
    \fi\fi\fi
 \else\if #1z\relax\@rotswtrue \let\box@dir\relax
    \if #2t\relax
@@ -435,7 +362,7 @@
       \let\@begin@parbox\vcenter
       \let\@end@parbox\relax
    \else
-      \def\@begin@parbox{\hskip\tbaselineshift$\vcenter}%
+      \def\@begin@parbox{$\vcenter}%
       \def\@end@parbox{\m@th$}%
    \fi\fi\fi
 \else\let\box@dir\tate
@@ -443,22 +370,14 @@
       \let\@begin@parbox\vtop
       \let\@end@parbox\relax
    \else\if #2b\relax
-      \let\@begin@parbox\vbox%
+      \let\@begin@parbox\vbox
       \let\@end@parbox\relax
    \else\ifmmode
-     \def\@begin@parbox{\setbox\z@=\vtop}%
-     \def\@end@parbox{%
-	 \@tempdima=\z@
-	 \advance\@tempdima-0.5\ht\z@
-	 \advance\@tempdima 0.5\dp\z@
-	 \raise\@tempdima\box\z@}%
+      \let\@begin@parbox\vcenter
+      \let\@end@parbox\relax
    \else
-     \def\@begin@parbox{\setbox\z@=\vtop}%
-     \def\@end@parbox{%
-	 \@tempdima=\z@
-	 \advance\@tempdima-0.5\ht\z@
-	 \advance\@tempdima 0.5\dp\z@
-	 \raise\@tempdima\box\z@}%
+      \def\@begin@parbox{$\vcenter}%
+      \def\@end@parbox{\m@th$}%
    \fi\fi\fi
 \fi\fi
 \else
@@ -570,9 +489,10 @@
 \DeclareRobustCommand\rensuji{%
   \@ifstar{\not@advancelinetrue\@rensuji}{\@rensuji}}
 \def\@rensuji{\@ifnextchar[{\@@rensuji}{\@@rensuji[c]}}
-\def\@@rensuji[#1]#2{\ifydir\hbox{#2}\else
-  \hskip\rensujiskip
+\def\@@rensuji[#1]#2{%
   \ifvmode\leavevmode\fi
+  \ifydir\hbox{#2}\else
+  \hskip\rensujiskip
   \ifnot@advanceline\not@advancelinefalse\else
     \setbox\z@\hbox{\yoko#2}%
     \@tempdima\ht\z@ \advance\@tempdima\dp\z@
@@ -590,7 +510,7 @@
 \let\Rensuji\rensuji
 \let\prensuji\rensuji
 \def\Kanji#1{\expandafter\@Kanji\csname c@#1\endcsname}
-\def\@Kanji#1{\expandafter\kansuji\number #1}
+\def\@Kanji#1{\kansuji #1}
 \def\kanji{\iftdir\expandafter\kansuji\fi}
 \def\boutenchar{\char\euc"A1A2}
 \def\bou#1{\ifvmode\leavevmode\fi\@bou#1\end}
