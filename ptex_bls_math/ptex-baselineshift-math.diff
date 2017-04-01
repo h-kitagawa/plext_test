@@ -94,8 +94,8 @@ index ea98f2d..0dde2bf 100644
 +
 +@<Initialize table entries...@>=
 +text_baseline_shift_factor:=1000;
-+script_baseline_shift_factor:=0;
-+scriptscript_baseline_shift_factor:=0;
++script_baseline_shift_factor:=700;
++scriptscript_baseline_shift_factor:=500;
 +
 +@z
 +
